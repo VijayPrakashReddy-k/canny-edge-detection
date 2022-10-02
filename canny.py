@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class cannyEdgeDetector:
-    def __init__(self, img_name,img, sigma=1, kernel_size=5, lowthreshold=0.05, highthreshold=0.15):
+    def __init__(self, img_name,img, sigma=1, kernel_size=3, lowthreshold=50, highthreshold=80):
         self.img_name = img_name
         self.img = img
         self.imgs_final = []
@@ -55,7 +55,7 @@ class cannyEdgeDetector:
 
         return output
 
-    def normalize(self,image):
+    def min_max_normalize(self,image):
         '''
         Normalizing the Image to the scale of [0 - 255]
         '''
@@ -81,29 +81,29 @@ class cannyEdgeDetector:
         for i in range(1, int(self.magnitude.shape[0] - 1)) :
             for j in range(1, int(self.magnitude.shape[1] - 1)) :
 
-                if(self.angle[i, j] == 0) :
+                if(0 <= self.angle[i,j] < 22.5) or (157.5 <= self.angle[i,j] <= 180):
                     if((self.magnitude[i, j] > self.magnitude[i, j+1]) and (self.magnitude[i, j] > self.magnitude[i, j-1])) :
                         thinned_output[i, j] = self.magnitude[i, j]
                     else :
-                        thinned_output[i, j] = 0.0
+                        thinned_output[i, j] = 0
 
-                elif(self.angle[i, j] == 45) :
+                elif(22.5 <= self.angle[i,j] < 67.5):
                     if((self.magnitude[i, j] > self.magnitude[i+1, j+1]) and (self.magnitude[i, j] > self.magnitude[i-1, j-1])) :
                         thinned_output[i, j] = self.magnitude[i, j]
                     else :
                         thinned_output[i, j] = 0.0
 
-                elif(self.angle[i, j] == 90) :
+                elif(67.5 <= self.angle[i,j] < 112.5):
                     if((self.magnitude[i, j] > self.magnitude[i+1, j]) and (self.magnitude[i, j] > self.magnitude[i-1, j])) :
                         thinned_output[i, j] = self.magnitude[i, j]
                     else :
-                        thinned_output[i, j] = 0.0
+                        thinned_output[i, j] = 0
 
                 else :
                     if((self.magnitude[i, j] > self.magnitude[i+1, j-1]) and (self.magnitude[i, j] > self.magnitude[i-1, j+1])) :
                         thinned_output[i, j] = self.magnitude[i, j]
                     else :
-                        thinned_output[i, j] = 0.0
+                        thinned_output[i, j] = 0
 
         return thinned_output
 
@@ -111,8 +111,7 @@ class cannyEdgeDetector:
         '''
         Implementation of hystersis thresholding on image based on Thresholdings {High and Low}
         '''
-        self.lowThreshold = int(self.lowThreshold*255)
-        self.highThreshold = int(self.highThreshold*255)
+        
         M, N = self.nms_thinned_output.shape  
         for i in range(1, M-1):
             for j in range(1, N-1):
@@ -150,8 +149,8 @@ class cannyEdgeDetector:
         Iy = self.convolution(self.img, np.transpose(g))
 
         # Normalize output
-        Iy = self.normalize(Iy)
-        Ix = self.normalize(Ix)
+        Iy = self.min_max_normalize(Iy)
+        Ix = self.min_max_normalize(Ix)
 
         # Step 4: obtain Ix' and Iy' the derivative of filted image
         self.Ix_prime = self.convolution(Ix, gx)
@@ -160,7 +159,7 @@ class cannyEdgeDetector:
 
         # Step 5: compute the magnitude (M) and angle
         magnitude,_ = self.magnitude_angle()
-        self.magnitude = self.normalize(magnitude)
+        self.magnitude = self.min_max_normalize(magnitude)
 
         # Step 6: non-maximum supression
         self.nms_thinned_output = self.non_maximum_suppression()

@@ -68,11 +68,11 @@ def side_show():
 
         st.write("#### Low value for Hysteresis Thresholding")
         inputs["low"] = st.number_input(
-            "Low Value",min_value = 0.01, max_value = 0.5, value = 0.2, step = 0.01,
+            "Low Value",min_value = 10, max_value = 75, value = 20, step = 5,
         )
         st.write("#### High value for Hysteresis Thresholding")
         inputs["high"] = st.number_input(
-            "High Value",min_value = 0.1, max_value = 1.0, value = 0.5, step = 0.1,
+            "High Value",min_value = 60, max_value = 120, value = 75, step = 5,
         )
     return inputs
 
@@ -125,19 +125,23 @@ def main():
                 detector = ced(uploadFile.name,img_path, sigma = params['sigma'], kernel_size=3, lowthreshold = params["low"], highthreshold = params["high"])
                 imgs_final = detector.detect()
 
-                # image_list = []
-                # for filename in glob.glob('output/*'): #assuming jpeg
-                #     im=Image.open(filename)
-                #     image_list.append(im)
+                image_list = []
+                folder_dir = os.getcwd() + "/tempDir/output/"
+                for filename in glob.iglob(f'{folder_dir}/*'):
+                #for filename in glob.glob('/tempDir/output/*'): #assuming jpeg
+                    print(filename)
+                    im=Image.open(filename)
+                    image_list.append(im)
                 #st.image(imgs_final)
 
-                name,ext = uploadFile.name.split(".")
+                st.image(image_list, use_column_width=True, caption=["Canny Edge Detection"] * len(image_list))
 
-                st.subheader("Canny Ende Detection Output")
-                folder_dir = os.getcwd() + "/tempDir/output/"
-                for images in glob.iglob(f'{folder_dir}/*'):
-                    if (images.endswith("."+ext)):
-                        st.image(images)
+                # name,ext = uploadFile.name.split(".")
+                # st.subheader("Canny Ende Detection Output")
+                # folder_dir = os.getcwd() + "/tempDir/output/"
+                # for images in glob.iglob(f'{folder_dir}/*'):
+                #     if (images.endswith("."+ext)):
+                #         st.image(images)
 
                 #st.image("full_figure.png")
                 #utils.visualize(image_list)
