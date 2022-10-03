@@ -98,6 +98,12 @@ class cannyEdgeDetector:
                         thinned_output[i, j] = self.magnitude[i, j]
                     else :
                         thinned_output[i, j] = 0
+                
+                elif(112.5 <= self.angle[i,j] < 157.5):
+                    if((self.magnitude[i, j] > self.magnitude[i+1, j]) and (self.magnitude[i, j] > self.magnitude[i-1, j])) :
+                        thinned_output[i, j] = self.magnitude[i, j]
+                    else :
+                        thinned_output[i, j] = 0
 
                 else :
                     if((self.magnitude[i, j] > self.magnitude[i+1, j-1]) and (self.magnitude[i, j] > self.magnitude[i-1, j+1])) :
@@ -111,7 +117,7 @@ class cannyEdgeDetector:
         '''
         Implementation of hystersis thresholding on image based on Thresholdings {High and Low}
         '''
-        
+
         M, N = self.nms_thinned_output.shape  
         for i in range(1, M-1):
             for j in range(1, N-1):
