@@ -4,13 +4,12 @@ import utils
 import shutil
 import base64
 import numpy as np
-import pandas as pd
 from PIL import Image
 import streamlit as st
 from canny import cannyEdgeDetector as ced
 
 # pandas display options
-pd.set_option('display.max_colwidth', None)
+#pd.set_option('display.max_colwidth', None)
 
 @st.cache(allow_output_mutation=True)
 def get_base64_of_bin_file(bin_file):
@@ -191,7 +190,7 @@ def main():
         \end{pmatrix}
         ''')
 
-        ps = '<p style="font-family:Courier; color:Brown; font-size: 12px;"> P.S : used 1-dimensional Gaussian filer for the assignment </p>'
+        ps = '<p style="font-family:Courier; color:Brown; font-size: 12px;"> P.S : used 1-dimensional Gaussian filter for the assignment </p>'
         st.markdown(ps, unsafe_allow_html=True)
 
         para = '<p style="font-family:Courier; color:Black; font-size: 14px;"> Then, the magnitude  𝐺  and the slope  𝜃  of the gradient are calculated: </p>'
@@ -217,6 +216,9 @@ def main():
 
         t5 = '<p style="font-family:Courier; color:Black; font-size: 16px;"> <b> 5. Edge tracking by Hysteresis Thresholding </b><br> <br> &emsp; &emsp;  Since a weak edge pixel caused from true edges will be connected to a strong edge pixel, pixel  𝑤  with weak gradient is marked as edge and included in the final edge map if and only if it is involved in the same blob (connected component) as some pixel  𝑠  with strong gradient. In other words, there should be a chain of neighbor weak pixels connecting  𝑤  and  𝑠  (the neighbors are 8 pixels around the considered one). </p>'
         st.markdown(t5, unsafe_allow_html=True)
+
+        conclude = '<p style="font-family:Courier; color:red; font-size: 14px;"> <b> Conclusion:</b> Higher sigma values identify larger scale edges and produce a coarse output, whereas lower sigma values produces more edges and detect finer characteristics. </b></p>'
+        st.markdown(conclude, unsafe_allow_html=True)
 
 if __name__ == '__main__':
 	main()
