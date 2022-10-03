@@ -35,3 +35,8 @@
 #### 5. Edge tracking by Hysteresis Thresholding
 
     Since a weak edge pixel caused from true edges will be connected to a strong edge pixel, pixel 𝑤 with weak gradient is marked as edge and included in the final edge map if and only if it is involved in the same blob (connected component) as some pixel 𝑠 with strong gradient. In other words, there should be a chain of neighbor weak pixels connecting 𝑤 and 𝑠 (the neighbors are 8 pixels around the considered one).
+    
+    
+#### Conclusion:
+
+- ***`Higher sigma values identify larger scale edges and produce a coarse output, whereas lower sigma values produce more edges and detect finer characteristics.`***
