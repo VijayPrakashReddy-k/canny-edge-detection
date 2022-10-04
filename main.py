@@ -41,8 +41,7 @@ def save_uploaded_file(uploadedfile):
 		pass
 	try:
 		os.makedirs("./tempDir")
-		os.makedirs("./tempDir/output")
-		os.makedirs("./tempDir/final_output")         
+		os.makedirs("./tempDir/output")        
 	except Exception:
 		pass
 	with open(os.path.join("tempDir",uploadedfile.name),"wb") as f:
@@ -62,7 +61,7 @@ def side_show():
     with st.sidebar:
         st.write("#### Standard Deviation for the Gaussian Distribution")
         inputs["sigma"] = st.number_input(
-            "Sigma Value",min_value = 1, max_value = 5, value = 1, step = 1,
+            "Sigma Value",min_value = 1, max_value = 10, value = 1, step = 1,
         )
 
         st.write("#### Low value for Hysteresis Thresholding")
